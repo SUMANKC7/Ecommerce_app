@@ -6,20 +6,27 @@ import 'package:ecommerce_application/pages/addtocart.dart';
 import 'package:ecommerce_application/pages/frontpage.dart';
 import 'package:ecommerce_application/pages/home.dart';
 import 'package:ecommerce_application/pages/homepage.dart';
-import 'package:ecommerce_application/pages/payment/consts.dart';
 import 'package:ecommerce_application/provider/bottom_nav.dart';
 import 'package:ecommerce_application/provider/buynow_provider.dart';
 import 'package:ecommerce_application/provider/cart_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _setup();
+
+  // Load env file FIRST
+  await dotenv.load(fileName: ".env");
+
+  // Init Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Stripe.publishableKey = stripePublishableKey;
+
+  // Assign publishable key from env
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
+
   runApp(
     MultiProvider(
       providers: [
@@ -30,10 +37,6 @@ void main() async {
       child: const ElectronicCommerce(),
     ),
   );
-}
-
-Future<void> _setup() async {
-  Stripe.publishableKey = stripePublishableKey;
 }
 
 class ElectronicCommerce extends StatelessWidget {

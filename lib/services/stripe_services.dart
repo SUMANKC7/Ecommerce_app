@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:ecommerce_application/pages/payment/consts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,89 +14,85 @@ class PaymentService {
     Map<String, dynamic> productDetails,
   ) async {
     try {
-      // Step 1: Create Payment Intent
-      Map<String, dynamic>? paymentIntent = await createPaymentIntent(
-        amount,
-        currency,
-      );
+      // 1) Create PaymentIntent on Stripe
+      final paymentIntent = await _createPaymentIntent(amount, currency);
       if (paymentIntent == null || paymentIntent["client_secret"] == null) {
-        print("Error: Payment Intent creation failed or client_secret is null");
+        debugPrint("❌ PaymentIntent creation failed or client_secret missing");
         return;
       }
+      final clientSecret = paymentIntent["client_secret"];
 
-      // Step 2: Initialize Payment Sheet
-      await Stripe.instance
-          .initPaymentSheet(
-            paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntent["client_secret"],
-              style: ThemeMode.dark,
-              merchantDisplayName: "Your Merchant Name",
-            ),
-          )
-          .then((value) {
-            print("Payment Sheet initialized successfully");
-          })
-          .catchError((error) {
-            print("Error initializing Payment Sheet: $error");
-          });
+      // 2) Init PaymentSheet
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          style: ThemeMode.dark,
+          merchantDisplayName: "Your Merchant Name",
+        ),
+      );
+      debugPrint("✅ PaymentSheet initialized");
 
-      // Step 3: Display Payment Sheet
-      await displayPaymentSheet(paymentIntent, productDetails);
+      // 3) Present sheet
+      await _presentPaymentSheet(productDetails);
     } catch (e) {
-      print("Payment exception: $e");
+      debugPrint("❌ makePayment exception: $e");
     }
   }
 
-  static Future<Map<String, dynamic>?> createPaymentIntent(
+  static Future<Map<String, dynamic>?> _createPaymentIntent(
     String amount,
     String currency,
   ) async {
     try {
-      Map<String, dynamic> body = {
-        "amount": calculateAmount(amount),
+      final secret = dotenv.env['STRIPE_SECRET_KEY'];
+      if (secret == null || secret.isEmpty) {
+        debugPrint("❌ STRIPE_SECRET_KEY missing from .env");
+        return null;
+      }
+
+      final body = {
+        "amount": _calculateAmount(amount),
         "currency": currency,
         "payment_method_types[]": "card",
       };
 
-      var response = await http.post(
+      final response = await http.post(
         Uri.parse("https://api.stripe.com/v1/payment_intents"),
         headers: {
-          "Authorization":
-              "Bearer $stripeSecretKey", // Replace with your secret key
+          "Authorization": "Bearer $secret",
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: body,
       );
 
+      debugPrint("Stripe status: ${response.statusCode}");
       if (response.statusCode == 200) {
-        print("Payment intent created successfully");
+        debugPrint("✅ PaymentIntent created");
         return jsonDecode(response.body);
       } else {
-        print("Error creating payment intent: ${response.body}");
+        debugPrint("❌ Stripe error: ${response.body}");
       }
     } catch (err) {
-      print("Error creating payment intent: $err");
+      debugPrint("❌ _createPaymentIntent error: $err");
     }
     return null;
   }
 
-  static Future<void> displayPaymentSheet(
-    Map<String, dynamic>? paymentIntent,
+  static Future<void> _presentPaymentSheet(
     Map<String, dynamic> productDetails,
   ) async {
     try {
       await Stripe.instance.presentPaymentSheet();
-      print("Payment successful!");
-
-      await storeTransactionInFirestore(productDetails);
+      debugPrint("✅ Payment successful");
+      await _storeTransactionInFirestore(productDetails);
     } on StripeException catch (e) {
-      print("User cancelled or payment failed: ${e.error.localizedMessage}");
+      debugPrint("⚠️ Stripe cancelled/failed: ${e.error.localizedMessage}");
     } catch (e) {
-      print("Error displaying payment sheet: $e");
+      debugPrint("❌ presentPaymentSheet error: $e");
     }
   }
 
-  static Future<void> storeTransactionInFirestore(
+  static Future<void> _storeTransactionInFirestore(
     Map<String, dynamic> productDetails,
   ) async {
     try {
@@ -107,21 +103,20 @@ class PaymentService {
         "quantity": productDetails["quantity"],
         "transaction_date": DateTime.now(),
       });
-      print("Transaction stored in Firestore successfully!");
+      debugPrint("✅ Transaction stored in Firestore");
     } catch (e) {
-      print("Error storing transaction in Firestore: $e");
+      debugPrint("❌ Firestore write error: $e");
     }
   }
 
-  static String calculateAmount(String amount) {
+  static String _calculateAmount(String amount) {
     try {
-      // Convert the amount to cents
-      double amountInDollars = double.parse(amount); // Parse as a double
-      int amountInCents = (amountInDollars * 100).toInt(); // Convert to cents
-      return amountInCents.toString();
+      final dollars = double.parse(amount);
+      final cents = (dollars * 100).toInt();
+      return cents.toString();
     } catch (e) {
-      print("Error parsing amount: $e");
-      return "0"; // Return a default value to avoid crashes
+      debugPrint("❌ amount parse error: $e");
+      return "0";
     }
   }
 }
