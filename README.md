@@ -17,15 +17,15 @@ This project demonstrates product catalog browsing, cart management, user authen
 
 | Landing | Login | Signup |
 |---------|-------|--------|
-| ![Landing](screenshot/landing.png) | ![Login](screenshot/login.png) | ![Signup](screenshot/signup.png) |
+| ![Landing](assests/screenshots/landing.png) | ![Login](assests/screenshots/login.png) | ![Signup](assests/screenshots/signup.png) |
 
 | Home Screen | Product Detail | Cart |
 |-------------|----------------|------|
-| ![Home](screenshot/homescreen.png) | ![Product Detail](screenshot/product_detail.png) | ![Cart](screenshot/cart.png) |
+| ![Home](assests/screenshots/home.png) | ![Product Detail](assests/screenshots/detail.png) | ![Cart](assests/screenshots/cart.png) |
 
 | Checkout | Payment | Search | Profile |
 |----------|---------|--------|---------|
-| ![Checkout](screenshot/checkout_page.png) | ![Payment](screenshot/payment.png) | ![Search](screenshot/search.png) | ![Profile](screenshot/profile.png) |
+| ![Checkout](assests/screenshots/checkout.png) | ![Payment](assests/screenshots/payment.png) | ![Search](assests/screenshots/search.png) | ![Profile](assests/screenshots/profile.png) |
 
 ## 📱 App Flow
 1. **Landing Page** → User is welcomed with an intro/branding screen.  
