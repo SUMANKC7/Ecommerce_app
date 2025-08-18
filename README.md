@@ -41,8 +41,8 @@ This project demonstrates product catalog browsing, cart management, user authen
 | ![Cart Mobile](assests/screenshots/cart.png) | ![Cart Web](assests/screenshots/cartweb.png) |
 
 | Checkout (Mobile) | Checkout (Web) | 
-|------------------|-----------------|-----------------|
-| ![Checkout](assests/screenshots/checkout.png) | ![Payment](assests/screenshots/checkoutweb.png) | 
+|------------------|-----------------|
+| ![Checkout](assests/screenshots/checkout.png) | ![Checkout](assests/screenshots/checkoutweb.png) | 
 
 ---
 
