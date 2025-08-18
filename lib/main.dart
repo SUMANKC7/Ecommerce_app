@@ -10,6 +10,7 @@ import 'package:ecommerce_application/provider/bottom_nav.dart';
 import 'package:ecommerce_application/provider/buynow_provider.dart';
 import 'package:ecommerce_application/provider/cart_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -24,8 +25,10 @@ Future<void> main() async {
   // Init Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Assign publishable key from env
-  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
+  // Only set Stripe key if not running on Web
+  if (!kIsWeb) {
+    Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
+  }
 
   runApp(
     MultiProvider(

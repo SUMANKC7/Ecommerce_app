@@ -1,3 +1,4 @@
+
 # 🛍️ E-Commerce App
 
 A complete Flutter E-Commerce application built with Firebase backend.  
@@ -10,22 +11,40 @@ This project demonstrates product catalog browsing, cart management, user authen
 - **Cart Management**
 - **Checkout & Payment Integration**
 - **User Profile Management**
-- **Responsive UI** for different screen sizes
+- **Responsive UI** for different screen sizes (mobile & web)
 - **State Management** with Provider
 
-## 📸 Screenshots
+## 📸 Screenshots (Mobile & Web)
 
-| Landing | Login | Signup |
-|---------|-------|--------|
-| ![Landing](assests/screenshots/landing.png) | ![Login](assests/screenshots/login.png) | ![Signup](assests/screenshots/signup.png) |
+| Landing (Mobile) | Landing (Web) |
+|-----------------|----------------|
+| ![Landing Mobile](assests/screenshots/landing.png) | ![Landing Web](assests/screenshots/landingweb.png) |
 
-| Home Screen | Product Detail | Cart |
-|-------------|----------------|------|
-| ![Home](assests/screenshots/home.png) | ![Product Detail](assests/screenshots/detail.png) | ![Cart](assests/screenshots/cart.png) |
+| Login (Mobile) | Login (Web) |
+|----------------|-------------|
+| ![Login Mobile](assests/screenshots/login.png) | ![Login Web](assests/screenshots/loginweb.png) |
 
-| Checkout | Payment | Search | Profile |
-|----------|---------|--------|---------|
-| ![Checkout](assests/screenshots/checkout.png) | ![Payment](assests/screenshots/payment.png) | ![Search](assests/screenshots/search.png) | ![Profile](assests/screenshots/profile.png) |
+| Home Screen (Mobile) | Home Screen (Web) |
+|--------------------|------------------|
+| ![Home Mobile](assests/screenshots/home.png) | ![Home Web](assests/screenshots/homeweb.png) |
+
+| Product Detail (Mobile) | Product Detail (Web) |
+|------------------------|---------------------|
+| ![Product Mobile](assests/screenshots/detail.png) | ![Product Web](assests/screenshots/detailweb.png) |
+
+| Search (Mobile) | Search (Web) |
+|----------------|---------------|
+| ![Search Mobile](assests/screenshots/search.png) | ![Search Web](assests/screenshots/searchweb.png) |
+
+| Cart (Mobile) | Cart (Web) |
+|----------------|-----------|
+| ![Cart Mobile](assests/screenshots/cart.png) | ![Cart Web](assests/screenshots/cartweb.png) |
+
+| Checkout (Mobile) | Checkout (Web) | 
+|------------------|-----------------|-----------------|
+| ![Checkout](assests/screenshots/checkout.png) | ![Payment](assests/screenshots/checkoutweb.png) | 
+
+---
 
 ## 📱 App Flow
 1. **Landing Page** → User is welcomed with an intro/branding screen.  
@@ -36,7 +55,7 @@ This project demonstrates product catalog browsing, cart management, user authen
 6. **Cart** → Add/remove products, view total price.  
 7. **Checkout** → Proceed to checkout with order summary.  
 8. **Payment** → Complete payment securely.  
-9. **Profile** → Manage user account and preferences.  
+ 
 
 ## 🛠️ Tech Stack
 - **Framework**: Flutter (Dart)  
@@ -48,4 +67,5 @@ This project demonstrates product catalog browsing, cart management, user authen
 
 ---
 
-📌 This project demonstrates my ability to build end-to-end, production-ready mobile applications with modern Flutter development practices.
+📌 This project demonstrates my ability to build end-to-end, production-ready mobile and web applications with modern Flutter development practices.  
+
